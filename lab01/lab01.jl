@@ -10,15 +10,12 @@ let
     n_intervals = length(intervals)
     ungroupped = vcat([fill(midpoints[i], freqs[i]) for i in 1:n_intervals]...)
 
-
-    f = Figure(
-        size = (700,500),
-    )
+    f = Figure(size = (700,500))
 
     ax1 = Axis(
         f[1, 1],
         xticks = 21:2:31,
-        yticks = 0:10:80,
+        yticks = 0:0.02:0.18,
         
         xminorticksvisible = true,
         xminorgridvisible = true,
@@ -26,10 +23,10 @@ let
         yminorticksvisible = true,
         yminorgridvisible = true,
 
-        yminorticks = IntervalsBetween(5),
+        yminorticks = IntervalsBetween(2),
         xminorticks = IntervalsBetween(2),
     )
-    ylims!(ax1, -1, 75)
+    # ylims!(ax1, -0.015, 0.73)
 
     ax2 = Axis(
         f[1, 1],
@@ -44,23 +41,21 @@ let
 
         yminorticks = IntervalsBetween(5),
     )
+    ylims!(ax2, -0.05, 1.02)
     hidespines!(ax2)
     hidexdecorations!(ax2)
-
     
     h = hist!(ax1,
         ungroupped,
-        
+        normalization = :pdf,
         color = (:royalblue, 0.65),
         bins = [21:2:31;],
         strokewidth = 0.5,
         strokecolor = (:black, 0.4)
-
     )
 
     cdf = ecdfplot!(ax2,
         ungroupped,
-        
         color = (:black, 0.65),
         linewidth = 3,
         step= :pre,
@@ -70,11 +65,12 @@ let
         [h, cdf],
         ["Гистограмма", L"F_n(x)"]
     )
-    Label(
-        f[0, :],
-        "Графический анализ, вариант 1",
-        fontsize = 22
-    )
+    # Label(
+    #     f[0, :],
+    #     "Графический анализ, вариант 1",
+    #     fontsize = 22
+    # )
+    save("lab01/pic1.png", f)
     f
 end
 
